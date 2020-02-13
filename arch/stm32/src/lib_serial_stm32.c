@@ -190,7 +190,7 @@ int lib_serial_write(lib_serial_hdl hdl, const uint8_t * const data, int len)
 	return -EIO;
 }
 
-int lib_serial_read(lib_serial_hdl hdl, uint8_t * const data, int maxlen, uint32_t frameTimeout)
+int lib_serial_read(lib_serial_hdl hdl, uint8_t * const data, int maxlen, uint32_t frameTimeoutMs)
 {
 	int ret;
 	if ((hdl == NULL) || (data == NULL) || (maxlen == 0)) {
@@ -201,7 +201,7 @@ int lib_serial_read(lib_serial_hdl hdl, uint8_t * const data, int maxlen, uint32
 		return -EINVAL;
 	}	
 
-	ret = serial_access__prepare_receiver(&hdl->serialAccess, data, maxlen, frameTimeout, &lib_serial__rx_finished);
+	ret = serial_access__prepare_receiver(&hdl->serialAccess, data, maxlen, frameTimeoutMs, &lib_serial__rx_finished);
 	if (ret < 0) {
 		return ret;
 	}

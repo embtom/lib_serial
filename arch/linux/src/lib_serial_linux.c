@@ -246,7 +246,7 @@ int lib_serial_write(lib_serial_hdl hdl, const uint8_t * const data, int len)
 	return 0;
 }
 
-int lib_serial_read(lib_serial_hdl hdl, uint8_t * const data, int maxlen, uint32_t frameTimeout)
+int lib_serial_read(lib_serial_hdl hdl, uint8_t * const data, int maxlen, uint32_t frameTimeoutMs)
 {
 	struct termios portSettings;
 	int ret;
@@ -260,7 +260,7 @@ int lib_serial_read(lib_serial_hdl hdl, uint8_t * const data, int maxlen, uint32
 	tcgetattr(hdl->fd, &portSettings);
 	portSettings.c_cc[VMIN] = maxlen;
 	/* timeout conversion from milliseconds to deciseconds */
-	portSettings.c_cc[VTIME] = frameTimeout / 100;
+	portSettings.c_cc[VTIME] = frameTimeoutMs / 100;
 
 	if((tcsetattr(hdl->fd,TCSANOW,&portSettings)) != 0) {
 	    return -EIO;
