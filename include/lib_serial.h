@@ -102,12 +102,13 @@ int lib_serial_write(lib_serial_hdl hdl, const uint8_t * const data, int len);
  * Param-in hdl: the handle to be used for communication
  * Param-out data: pointer to the data buffer to write new data
  * Param-in maxlen: max buffer lenth 
- * Param-in frameTimeout timeout interval without any new character 
- * Return: On success 0 is returned
- *         -EINVAL: invalid handle
- *         -EIO: I/O error accessing the handle
+ * Param-in frameTimeoutMs timeout interval in milliseconds without any new character 
+ * Return: On success, the number of bytes read is returned
+ *         On Error:
+ *          -EINVAL: invalid handle
+ *          -EIO: I/O error accessing the handle
  */
-int lib_serial_read(lib_serial_hdl hdl, uint8_t * const data, int maxlen, uint32_t frameTimeout);
+int lib_serial_read(lib_serial_hdl hdl, uint8_t * const data, int maxlen, uint32_t frameTimeoutMs);
 
 #ifdef __cplusplus
 }
