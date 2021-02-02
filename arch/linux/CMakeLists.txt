@@ -6,3 +6,7 @@ if("${LIB_SERIAL_ARCHITECTURE}" STREQUAL "linux")
     lib_serial_add_public_definition(LIB_SERIAL_LINUX)
 endif()
 
+install(DIRECTORY include/
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/embtom/libserial"
+)
+
