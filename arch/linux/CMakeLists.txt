@@ -7,6 +7,6 @@ if("${LIB_SERIAL_ARCHITECTURE}" STREQUAL "linux")
 endif()
 
 install(DIRECTORY include/
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/embtom/libserial"
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/embtom/${PROJECT_NAME}"
 )
 
