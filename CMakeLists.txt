@@ -1,6 +1,7 @@
 project(lib_serial)
 
 cmake_minimum_required(VERSION 2.6)
+include(GNUInstallDirs)
 add_subdirectory(arch)
 
 ######################################################################################
@@ -29,7 +30,10 @@ GET_PROPERTY(LIB_SERIAL_PRIVATE_HEADER      GLOBAL PROPERTY LIB_SERIAL_ARCH_INTE
 GET_PROPERTY(LIB_SERIAL_DEPEND              GLOBAL PROPERTY LIB_SERIAL_ARCH_DEPEND)
 GET_PROPERTY(LIB_SERIAL_PUBLIC_DEFINITION  GLOBAL PROPERTY LIB_SERIAL_ARCH_PUBLIC_DEFINITION)
 
-SET(LIB_SERIAL_PUBLIC_HEADER ${LIB_SERIAL_PUBLIC_HEADER} include)
+SET(LIB_SERIAL_PUBLIC_HEADER
+    "${LIB_SERIAL_PUBLIC_HEADER}"
+    "${CMAKE_CURRENT_LIST_DIR}/include"
+)
 SET(LIB_SERIAL_PRIVATE_HEADER ${LIB_SERIAL_PRIVATE_HEADER})
 SET(LIB_SERIAL_SOURCE_C   ${LIB_SERIAL_SOURCE_C} )
 
@@ -39,9 +43,38 @@ SET(LIB_SERIAL_SOURCE_C   ${LIB_SERIAL_SOURCE_C} )
 ######################################################
 add_library(${PROJECT_NAME} STATIC ${LIB_SERIAL_SOURCE_C})
 target_link_libraries(${PROJECT_NAME} ${LIB_SERIAL_DEPEND})
-target_include_directories(${PROJECT_NAME} PUBLIC include ${LIB_SERIAL_PUBLIC_HEADER})
-target_include_directories(${PROJECT_NAME} PRIVATE ${LIB_SERIAL_PRIVATE_HEADER})
+target_include_directories(${PROJECT_NAME}
+PUBLIC
+    "$<BUILD_INTERFACE:${LIB_SERIAL_PUBLIC_HEADER}>"
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/embtom/${PROJECT_NAME}>
+PRIVATE 
+    ${LIB_SERIAL_PRIVATE_HEADER} 
+)
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${LIB_SERIAL_PUBLIC_DEFINITION})
+
 
 #SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -E")
 unset(LIB_SERIAL_ARCHITECTURE CACHE)
+
+######################################################
+#Install target
+######################################################
+
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}-targets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/embtom/${PROJECT_NAME}"
+)
+
+install(DIRECTORY include/
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/embtom/${PROJECT_NAME}"
+)
+
+install(EXPORT ${PROJECT_NAME}-targets
+    NAMESPACE
+        EMBTOM::
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+)
+
+install(FILES "cmake/${PROJECT_NAME}-config.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+)
