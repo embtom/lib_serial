@@ -3,6 +3,6 @@ include(CMakeFindDependencyMacro)
 
 list(APPEND CMAKE_MODULE_PATH "${libserial_CMAKE_DIR}/cmake")
 
-if(NOT TARGET EMBTOM::libserial)
-    include("${libserial_CMAKE_DIR}/libserial-targets.cmake")
+if(NOT TARGET EMBTOM::lib_serial)
+    include("${libserial_CMAKE_DIR}/lib_serial-targets.cmake")
 endif()
